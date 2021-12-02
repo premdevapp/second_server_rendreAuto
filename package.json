@@ -1,27 +1,21 @@
 {
-  "name": "ct-be",
+  "name": "puppeter_nodejs_nft",
   "version": "1.0.0",
-  "description": "backend for crypto",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "nodemon server/index.js"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://dev-five2one@bitbucket.org/five2one/ct-be.git"
-  },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://bitbucket.org/five2one/ct-be/issues"
-  },
-  "homepage": "https://bitbucket.org/five2one/ct-be#readme",
   "dependencies": {
-    "axios": "^0.24.0",
-    "body-parser": "^1.19.0",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "puppeteer": "^12.0.1",
+    "puppeteer-table-scraper": "^1.0.4"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.15"
   }
 }
