@@ -1,0 +1,29 @@
+npx serverless --version # check serverless version
+
+serverless config credentials --provider aws --key <key>AKIAWBCA7W5WE5OGLK76  --secret <secret>kQtTTbjQhIi0QNcxpHQ3kHenWfAQmAcg0QOZwQiO # insert your I AM api key and secret
+serverless config credentials --provider aws --key AKIAWBCA7W5WE5OGLK76  --secret kQtTTbjQhIi0QNcxpHQ3kHenWfAQmAcg0QOZwQiO # insert your I AM api key and secret
+
+npx serverless deploy # to deploy
+
+
+permission
+AWSCloudFormationFullAccess
+s3FullAccess
+LambdaFull
+FrontAccessFull
+iamFull
+apiGate
+
+---
+"iam:CreateRole",
+        "iam:PutRolePolicy",
+        "lambda:CreateFunction",
+        "lambda:InvokeAsync",
+        "lambda:InvokeFunction",
+        "iam:PassRole",
+        "lambda:UpdateAlias",
+        "lambda:CreateAlias",
+        "lambda:GetFunctionConfiguration",
+        "lambda:AddPermission",
+        "lambda:UpdateFunctionCode",
+        "s3:ListBucket"
