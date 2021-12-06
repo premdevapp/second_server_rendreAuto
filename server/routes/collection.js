@@ -6,12 +6,13 @@ const data = require("../data/imgageData.json");
 
 
 router.get("/", (req, res) => {
+  const page = req.query.page || 1
+  const limit = req.query.limit || 20
   const intermediate = data.link.map(item => {
       return item.slice(1);
   });
-res.json(intermediate);
+res.json(intermediate.splice((page -1)*limit,limit));
 });
-
 
 router.get("/:collection", async (req, res) => {
   try {
@@ -25,7 +26,7 @@ router.get("/:collection", async (req, res) => {
         },
       }
     );
-    console.log(response.data);
+    
     const {primary_asset_contracts, traits, stats, discord_url, external_url, image_url, twitter_username, instagram_username} = response.data.collection;
     res.json({primary_asset_contracts, traits, stats, discord_url, external_url, image_url, twitter_username, instagram_username});
   } catch (error) {
