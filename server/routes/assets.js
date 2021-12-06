@@ -9,6 +9,7 @@ router.get("/:address", async (req, res) => {
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
     (v) => v + (page - 1) * limit
   );
+  const totalItems = req.query.totalItems || 25;
 
   try {
     const response = await axios.get(
@@ -23,7 +24,14 @@ router.get("/:address", async (req, res) => {
       }
     );
     console.log(response.data);
-    res.json(response.data);
+    if(totalItems/12 >= page) {
+      console.log("working");
+      res.json(response.data)
+    } else {
+      console.log("yet to add")
+      res.json([])
+    }
+    //res.json([response.data]);
   } catch (err) {
     console.log(err);
   }

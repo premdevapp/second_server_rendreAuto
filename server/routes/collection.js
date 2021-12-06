@@ -7,11 +7,11 @@ const data = require("../data/imgageData.json");
 
 router.get("/", (req, res) => {
   const page = req.query.page || 1
-  const limit = req.query.limit || 20
+  const limit = req.query.limit || 10
   const intermediate = data.link.map(item => {
-      return item.slice(1);
+    return item.slice(1);
   });
-res.json(intermediate.splice((page -1)*limit,limit));
+  res.json({ totalNum: intermediate.length, sliced: intermediate.splice((page - 1) * limit, limit) });
 });
 
 router.get("/:collection", async (req, res) => {
@@ -26,9 +26,9 @@ router.get("/:collection", async (req, res) => {
         },
       }
     );
-    
-    const {primary_asset_contracts, traits, stats, discord_url, external_url, image_url, twitter_username, instagram_username} = response.data.collection;
-    res.json({primary_asset_contracts, traits, stats, discord_url, external_url, image_url, twitter_username, instagram_username});
+
+    const { banner_image_url, primary_asset_contracts, traits, stats, discord_url, external_url, image_url, twitter_username, instagram_username } = response.data.collection;
+    res.json({ banner_image_url, primary_asset_contracts, traits, stats, discord_url, external_url, image_url, twitter_username, instagram_username });
   } catch (error) {
     console.log(error);
   }
