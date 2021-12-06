@@ -7,7 +7,7 @@ const data = require("../data/imgageData.json");
 
 router.get("/", (req, res) => {
   const page = req.query.page || 1
-  const limit = req.query.limit || 10
+  const limit = req.query.limit || 12
   const intermediate = data.link.map(item => {
     return item.slice(1);
   });
