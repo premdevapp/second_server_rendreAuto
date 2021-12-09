@@ -5,13 +5,15 @@
   "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
+    "start": "cross-env host=localhost port=27017 dbname=nft node index.js",
     "dev": "nodemon --watch index.js --exec \"npm run start\""
   },
   "dependencies": {
     "axios": "^0.24.0",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "express": "^4.17.1",
+    "mongoose": "^6.1.0",
     "morgan": "^1.10.0",
     "serverless-http": "^2.7.0"
   },

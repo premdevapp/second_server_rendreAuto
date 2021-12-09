@@ -2,19 +2,35 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 
+const assets = require("../model/assets");
+
+const data = require("../data/imgageData.json");
+
+const intermediate = data.link.map((item) => {
+  return item.slice(1);
+});
+
 router.get("/:address", async (req, res) => {
-  const page = req.query.page || 1;
-  const limit = req.query.limit || 20;
-  const ids = Array.from(
-    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-    (v) => v + (page - 1) * limit
+  const totalItems = req.query.totalItems || 30;
+  const offset = req.query.offset || 0;
+  const limit = req.query.limit || 30;
+  let ids = Array.from(Array(parseInt(totalItems)).keys());
+  ids = ids.map((id) => id + 1);
+  const idNums = ids.map((id) => id.toString());
+
+  const stringQuery = idNums.reduce(
+    (accumulation, currentValue) =>
+      accumulation + `token_ids=${currentValue}& `,
+    ""
   );
-  const totalItems = req.query.totalItems || 25;
+  const newStrQuery = stringQuery.split(" ");
+  const postedQry = newStrQuery
+    .slice(parseInt(offset), parseInt(limit))
+    .join("");
 
   try {
     const response = await axios.get(
-      // `https://api.opensea.io/api/v1/asset/${req.params.address}/${req.params.id}`,
-      `https://api.opensea.io/api/v1/assets?token_ids=${ids[0]}&token_ids=${ids[1]}&token_ids=${ids[2]}&token_ids=${ids[3]}&token_ids=${ids[4]}&token_ids=${ids[5]}&token_ids=${ids[6]}&token_ids=${ids[7]}&token_ids=${ids[8]}&token_ids=${ids[9]}&token_ids=${ids[10]}&token_ids=${ids[11]}&token_ids=${ids[12]}&token_ids=${ids[13]}&token_ids=${ids[14]}&token_ids=${ids[15]}&token_ids=${ids[16]}&token_ids=${ids[17]}&token_ids=${ids[18]}&token_ids=${ids[19]}&asset_contract_address=${req.params.address}&order_direction=asc&offset=${limit-20}`,
+      `https://api.opensea.io/api/v1/assets?${postedQry}&asset_contract_address=${req.params.address}&order_direction=asc&offset=${offset}&limit=${limit}`,
       {
         headers: {
           Authorization: {
@@ -24,16 +40,33 @@ router.get("/:address", async (req, res) => {
       }
     );
     console.log(response.data);
-    if(totalItems/20 >= page) {
-      console.log("working");
-      res.json(response.data)
-    } else {
-      console.log("yet to add")
-      res.json([])
-    }
-    //res.json(response.data);
+    const asset = new assets({
+      name: response.data.assets[0].collection.slug,
+      ...response.data,
+    });
+    asset.save(function (err, data) {
+      if (err) {
+        console.log(error);
+      } else {
+        console.log("Data inserted");
+      }
+    });
+    return res.json(response.data);
   } catch (err) {
     console.log(err);
+  }
+});
+
+router.get("/all", async (req, res) => {
+  try {
+    for await (let item of intermediate) {
+      const result = await axios.get(
+        `http://localhost:3000/collection/${item}`
+      );
+      console.log("check : ", result);
+    }
+  } catch (e) {
+    console.log(e);
   }
 });
 module.exports = router;

@@ -13,7 +13,8 @@ const jsonRes = [];
 
 const scraperObject = {
 
-  url: "https://rarity.tools",
+ // url: "https://rarity.tools",
+  url: "https://opensea.io/rankings?category=new",
 
   async scraper(browser) {
     let page = await browser.newPage();
@@ -21,7 +22,7 @@ const scraperObject = {
     await page.goto(this.url);
     await page.setDefaultNavigationTimeout(60000);
     await page.waitForSelector("table");
-    //await page.$$eval('table.relative.m-auto.dataTable', t =>{console.log(t); return t.map(tab => tab.querySelector('td'))});
+    //await page.$$eval('/html/body/div[1]/div[1]/main/div/div[2]/div/div[2]/', t =>{console.log(t); return t.map(tab => tab.querySelector('td'))});
     let result = await page.evaluate(() => {
       const tds = Array.from(document.querySelectorAll("#__layout > div > div.p-4.pb-20.overflow-x-auto > div:nth-child(5) > div > div > table"));
       console.log("tds",tds);

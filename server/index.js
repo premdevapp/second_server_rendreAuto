@@ -1,12 +1,35 @@
 const serverless = require('serverless-http');
 const express = require('express');
+const mongoose = require("mongoose");
 const cors = require('cors');
 const app = express();
+
+const port = 3000;
+
+// Connect to MongoDB
+ const database =new mongoose.connect(
+  // `mongodb+srv://premnath:Premnath@nftcluster.eayls.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
+  `mongodb://${process.env.host}:${process.env.port}/${process.env.dbname}`,
+  {
+     auth: {
+      username: "root",
+      password: "rootpassword",
+    },
+    authSource: "admin", 
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+)
+  .then(() => {
+    console.log("MongoDB Connection established successfully.");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 // env
 
 const isProdOrDev = process.env.NODE_ENV === 'development';
-const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(require('morgan')('dev'));
@@ -51,7 +74,8 @@ app.use(function(err, req, res, next) {
   
 
 app.listen(port, "0.0.0.0", () => {
-  console.log(`Server is running on port ${port}...`);
+  console.log(`Server is running on  port ${port}...`);
 });
 
 module.exports.handler = serverless(app);
+module.exports = database
