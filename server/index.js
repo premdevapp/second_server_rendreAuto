@@ -8,14 +8,14 @@ const port = 3000;
 
 // Connect to MongoDB
  const database =new mongoose.connect(
-  // `mongodb+srv://premnath:Premnath@nftcluster.eayls.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
-  `mongodb://${process.env.host}:${process.env.port}/${process.env.dbname}`,
+   `mongodb+srv://premnath:Premnath@nftcluster.eayls.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
+  //`mongodb://${process.env.host}:${process.env.port}/${process.env.dbname}`,
   {
-     auth: {
+     /* auth: {
       username: "root",
       password: "rootpassword",
     },
-    authSource: "admin", 
+    authSource: "admin",  */
     useNewUrlParser: true,
     useUnifiedTopology: true,
   }

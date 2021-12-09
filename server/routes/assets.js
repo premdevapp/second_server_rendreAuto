@@ -10,6 +10,42 @@ const intermediate = data.link.map((item) => {
   return item.slice(1);
 });
 
+
+
+router.get("/all", async (req, res) => {
+  try {
+    for (let item of intermediate) {
+      const result = await axios.get(
+        `https://api.opensea.io/api/v1/collection/${item}`,
+        {
+          headers: {
+            Authorization: {
+              ["X-API-KEY"]: "79734c407faa40b89c45de1123cabdf6",
+            },
+          },
+        }
+      );
+      const { primary_asset_contracts, stats } = result.data.collection;
+      const address = primary_asset_contracts[0].address;
+      const { total_supply } = stats;
+      const bundle = total_supply / 30;
+      let offset = 0,
+        limit = 30;
+      for (let i = 1; i < bundle; i++) {
+        await axios.get(
+          `http://localhost:3000/assets/${address}?totalItems=${total_supply}&offset=${(offset*limit)}&limit=${limit*i}`
+        );
+        offset += 30;
+        limit += 30;
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
+});
+
+
+
 router.get("/:address", async (req, res) => {
   const totalItems = req.query.totalItems || 30;
   const offset = req.query.offset || 0;
@@ -51,22 +87,10 @@ router.get("/:address", async (req, res) => {
         console.log("Data inserted");
       }
     });
-    return res.json(response.data);
+    return res.json({"data":"added"});
   } catch (err) {
     console.log(err);
   }
 });
 
-router.get("/all", async (req, res) => {
-  try {
-    for await (let item of intermediate) {
-      const result = await axios.get(
-        `http://localhost:3000/collection/${item}`
-      );
-      console.log("check : ", result);
-    }
-  } catch (e) {
-    console.log(e);
-  }
-});
 module.exports = router;
