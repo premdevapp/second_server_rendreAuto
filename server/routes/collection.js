@@ -70,13 +70,13 @@ router.get("/:collection", async (req, res) => {
       instagram_username,
       ...response.data.collection,
     });
-    collect.save(function (err, data) {
+   /*  collect.save(function (err, data) {
       if (err) {
         console.log(err);
       } else {
         console.log(data);
       }
-    }); 
+    });  */
     res.json({
       banner_image_url,
       primary_asset_contracts,
