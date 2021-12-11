@@ -64,18 +64,17 @@ router.get("/:address", async (req, res) => {
     const checkTraits = traitsContents.split(",") || [];
     const traitsCheck = new Map([...checkTraits.map((e) => e.split(":"))]);
     const checker = traitsCheck.entries();
-    
+
     //console.log(array.filter((list)=>array.some(()=>list % 2 === 0)));
-    
+
     for await (let element of groups) {
       const in_m = funcQuryStr(element);
       arrLnk.push({ in_m, offset_internal });
       offset_internal += limit;
     }
-    
-    for(let i =0; i < traitSize; i++){
+
+    for (let i = 0; i < traitSize; i++) {
       check.push(checker.next().value);
-      
     }
 
     for await (let link of arrLnk) {
@@ -92,11 +91,8 @@ router.get("/:address", async (req, res) => {
             },
           },
         });
-        
 
         response.data.assets.forEach((e) => {
-          
-         
           groupData.push(e);
         });
       } catch (err) {
@@ -104,9 +100,22 @@ router.get("/:address", async (req, res) => {
       }
     }
   }
+
   // console.log(e.traits, e.token_id, i);
-  console.log("\n", "checking: ", check[0][0], ":", check[0][1], "\n", "checking: ", check[1][0], ":", check[1][1], "\n");
-   res.json({ ...groupData });
+ const  check1 =[...check.flat().map((e) => e.replace(/\d+/g, ""))];
+  
+  /* const filter = groupData.filter((e) => {
+    console.log(e);
+    return groupData.some(()=>e.traits[0].trait_type == check1[0] && e.traits[0].value == check1[1]);
+  }); */
+
+  const filter = groupData.filter((e) => {
+    return e.traits.some( (t) => {  return t.trait_type == check1[0] && t.value == check1[1]}); 
+  });
+
+ const filteredTraits = filter.map((e) => e.token_id);
+
+  res.json({group:[ ...groupData ], filteredTraits: filteredTraits});
 });
 
 module.exports = router;
