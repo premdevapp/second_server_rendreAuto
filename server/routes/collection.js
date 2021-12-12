@@ -19,8 +19,8 @@ router.get("/", (req, res) => {
   });
 });
 
- router.get("/all", async function (){
-  try{
+router.get("/all", async (req, res) => {
+  try {
     const response = await collection.find({});
     /* for(let item of intermediate){
       const result = await axios.get(`http://localhost:3000/collection/${item}`);
@@ -28,10 +28,10 @@ router.get("/", (req, res) => {
       console.log(result);
     }; */
     res.json(response);
-  }catch(e){
+  } catch (e) {
     console.log(e);
   }
-}) 
+});
 
 router.get("/:collection", async (req, res) => {
   try {
