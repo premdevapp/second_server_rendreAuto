@@ -46,8 +46,6 @@ router.get("/:address", async (req, res) => {
     }
   }
 
-  //console.log("traitSize", traitSize, "traitsContents", traitsContents, "\n");
-
   if (traitSize > 0) {
     ids = ids.map((id) => id.toString());
 
@@ -60,12 +58,9 @@ router.get("/:address", async (req, res) => {
       });
 
     let offset_internal = offset || 0;
-    //filter assets ny traits
     const checkTraits = traitsContents.split(",") || [];
     const traitsCheck = new Map([...checkTraits.map((e) => e.split(":"))]);
     const checker = traitsCheck.entries();
-
-    //console.log(array.filter((list)=>array.some(()=>list % 2 === 0)));
 
     for await (let element of groups) {
       const in_m = funcQuryStr(element);
@@ -101,35 +96,30 @@ router.get("/:address", async (req, res) => {
     }
   }
 
-  // console.log(e.traits, e.token_id, i);
   const check1 = [...check.flat().map((e) => e.replace(/\d+/g, ""))];
 
-  /* const filter = groupData.filter((e) => {
-    console.log(e);
-    return groupData.some(()=>e.traits[0].trait_type == check1[0] && e.traits[0].value == check1[1]);
-  }); */
-  console.log("checking : >>", check1, "\n");
+  let filter = [];
 
-  const filter = groupData.filter((e) => {
-    /* const value = [];
-    for (let i = 0; i < check1.length; i++) {
-      if (i % 2 == 0) {
-        value.push(
-          e.traits.some((t) => {
+  for (let i = 0; i < check1.length; i++) {
+    if (i % 2 == 0) {
+      filter.push(
+        groupData.filter((e) => {
+          return e.traits.some((t) => {
             return t.trait_type == check1[i] && t.value == check1[i + 1];
-          })
-        );
-      }
-    } */
-    return  e.traits.some((t) => {
-      return t.trait_type == check1[0] && t.value == check1[1];
-    })
-    return value;
+          });
+        })
+      );
+    }
+  }
+  filter = [...filter.flat()];
+  const filteredTraits = new Set(filter.map((e) => e.token_id));
+
+  console.log("checking : >>", filteredTraits, "\n");
+
+  res.json({
+    group: [...groupData],
+    filteredTraits: Array.from(filteredTraits),
   });
-
-  const filteredTraits = filter.map((e) => e.token_id);
-
-  res.json({ group: [...groupData], filteredTraits: filteredTraits });
 });
 
 module.exports = router;
