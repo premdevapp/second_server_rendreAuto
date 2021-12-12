@@ -111,7 +111,7 @@ router.get("/:address", async (req, res) => {
   console.log("checking : >>", check1, "\n");
 
   const filter = groupData.filter((e) => {
-    const value = [];
+    /* const value = [];
     for (let i = 0; i < check1.length; i++) {
       if (i % 2 == 0) {
         value.push(
@@ -120,7 +120,10 @@ router.get("/:address", async (req, res) => {
           })
         );
       }
-    }
+    } */
+    return  e.traits.some((t) => {
+      return t.trait_type == check1[0] && t.value == check1[1];
+    })
     return value;
   });
 
