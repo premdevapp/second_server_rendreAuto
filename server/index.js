@@ -6,9 +6,12 @@ const app = express();
 
 const port = 3000;
 
+//cached data
+const cacheFactory = new Map();
+
 // Connect to MongoDB
  const database =new mongoose.connect(
-   `mongodb+srv://premnath:Premnath@nftcluster.eayls.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`,
+   `mongodb+srv://premnath:Premnath@nftcluster.eayls.mongodb.net/nftData?retryWrites=true&w=majority`,
   //`mongodb://${process.env.host}:${process.env.port}/${process.env.dbname}`,
   {
      /* auth: {

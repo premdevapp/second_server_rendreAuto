@@ -97,6 +97,7 @@ router.get("/:address", async (req, res) => {
   }
 
   const check1 = [...check.flat().map((e) => e.replace(/\d+/g, ""))];
+  console.log(check1);
 
   let filter = [];
 
@@ -111,6 +112,7 @@ router.get("/:address", async (req, res) => {
       );
     }
   }
+
   filter = [...filter.flat()];
   const filteredTraits = new Set(filter.map((e) => e.token_id));
 

@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 
-//const data = require("../data/imgageData.json");
+const data = require("../data/imgageData.json");
 
 const collection = require("../model/collection");
 
-/* const intermediate = data.link.map((item) => {
+const intermediate = data.link.map((item) => {
   return item.slice(1);
-}); */
+});
 
 router.get("/", (req, res) => {
   const page = req.query.page || 1;
@@ -21,15 +21,12 @@ router.get("/", (req, res) => {
 
 router.get("/all", async (req, res) => {
   try {
-    const response = await collection.find({});
-    /* for(let item of intermediate){
-      const result = await axios.get(`http://localhost:3000/collection/${item}`);
-    
-      console.log(result);
-    }; */
-    res.json(response);
+    for (let item of intermediate) {
+      await axios.get(`http://localhost:3000/collection/${item}`);
+    }
+    res.json({ response: "saved" });
   } catch (e) {
-    console.log(e);
+    console.log(errorVal);
   }
 });
 
@@ -71,25 +68,19 @@ router.get("/:collection", async (req, res) => {
       ...response.data.collection,
     });
 
-    /*  collect.save(function (err, data) {
+    collect.save(function (err, data) {
       if (err) {
         console.log(err);
       } else {
-        console.log(data);
+        console.log("saved");
       }
-    });  
-     */
-    res.json({
-      banner_image_url,
-      primary_asset_contracts,
-      traits,
-      stats,
-      discord_url,
-      external_url,
-      image_url,
-      twitter_username,
-      instagram_username,
     });
+
+    setTimeout(() => {
+      console.log("time elapsed 5 seconds");
+    }, 5000);
+
+    res.json({ data: "saved" });
   } catch (error) {
     console.log(error);
   }
