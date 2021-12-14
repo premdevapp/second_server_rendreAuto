@@ -4,7 +4,7 @@ const axios = require("axios");
 
 const data = require("../data/imgageData.json");
 
-const collection = require("../model/collection");
+//const collection = require("../model/collection");
 
 const intermediate = data.link.map((item) => {
   return item.slice(1);
@@ -20,11 +20,15 @@ router.get("/", (req, res) => {
 });
 
 router.get("/all", async (req, res) => {
+  const dataArr = [];
   try {
     for (let item of intermediate) {
-      await axios.get(`http://localhost:3000/collection/${item}`);
+      const response = await axios.get(
+        `http://localhost:3000/collection/${item}`
+      );
+      dataArr.push(response.data);
     }
-    res.json({ response: "saved" });
+    res.json({ response: dataArr });
   } catch (e) {
     console.log(errorVal);
   }
@@ -55,6 +59,8 @@ router.get("/:collection", async (req, res) => {
       instagram_username,
     } = response.data.collection;
 
+    /*
+
     const collect = new collection({
       banner_image_url,
       primary_asset_contracts,
@@ -67,8 +73,7 @@ router.get("/:collection", async (req, res) => {
       instagram_username,
       ...response.data.collection,
     });
-
-    collect.save(function (err, data) {
+ collect.save(function (err, data) {
       if (err) {
         console.log(err);
       } else {
@@ -79,8 +84,22 @@ router.get("/:collection", async (req, res) => {
     setTimeout(() => {
       console.log("time elapsed 5 seconds");
     }, 5000);
-
+    
     res.json({ data: "saved" });
+    
+    */
+    res.json({
+      banner_image_url,
+      primary_asset_contracts,
+      traits,
+      stats,
+      discord_url,
+      external_url,
+      image_url,
+      twitter_username,
+      instagram_username,
+      ...response.data.collection,
+    });
   } catch (error) {
     console.log(error);
   }
