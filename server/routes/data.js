@@ -2,10 +2,13 @@ const router = require("express").Router();
 const collection = require("../model/collection");
 
 router.get("/collection/desc", async (req, res) => {
+    const skip = parseInt(req.query.skip) || 0;
   try {
     await collection
       .find({})
       .sort([["stats.total_volume", "desc"]])
+      .skip(skip)
+      .limit(30)
       .exec((err, docs) => {
         if (err) {
           console.log(err);
